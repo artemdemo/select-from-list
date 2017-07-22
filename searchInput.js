@@ -57,12 +57,24 @@
         }
 
         onKeyUp(e) {
+            this.filterSearchList(e.target.value);
+        }
+
+        onFocusOut() {
+            this.updateSearchList();
+        }
+
+        onFocus(e) {
+            this.filterSearchList(e.target.value);
+        }
+
+        filterSearchList(value) {
             this.filteredList = [];
-            if (e.target.value === '') {
-                this.updateSearchList([]);
+            if (value === '') {
+                this.updateSearchList();
                 return;
             }
-            const searchRegex = new RegExp(SearchInput.escapeRegex(e.target.value), 'i');
+            const searchRegex = new RegExp(SearchInput.escapeRegex(value), 'i');
             for (const item of this.searchList) {
                 if (searchRegex.test(item.text)) {
                     this.filteredList.push(item);
@@ -111,6 +123,8 @@
             const inputEl = document.createElement('input');
             inputEl.classList.add('form-control');
             inputEl.addEventListener('keyup', this.onKeyUp.bind(this));
+            inputEl.addEventListener('focusout', this.onFocusOut.bind(this));
+            inputEl.addEventListener('focus', this.onFocus.bind(this));
             wrapEl.appendChild(inputEl);
 
             this.listEl = document.createElement('div');
