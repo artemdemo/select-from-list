@@ -1,3 +1,43 @@
 .container_main {
     margin-top: 10%;
 }
+
+.list {
+    display: none;
+    padding: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    position: relative;
+    top: -1px;
+    box-shadow: 0 2px 5px #d3d3d3;
+    background-color: white;
+}
+    .list_open {
+        display: block;
+        transform-origin: top;
+        animation: open-list 0.2s;
+        animation-fill-mode: forwards;
+    }
+    .list__item {
+        padding: 4px 0;
+        border-bottom: 1px dotted #dfdfdf;
+    }
+    .list__item:last-of-type {
+        border-bottom: none;
+    }
+    .list__item_empty {
+        display: none;
+    }
+
+@keyframes open-list {
+    0% {
+        display: none;
+        transform: scaleY(0);
+    }
+    1% {
+        display: block;
+    }
+    100% {
+        transform: scaleY(1);
+    }
+}

@@ -70,19 +70,19 @@
         }
 
         updateSearchList(list = []) {
-            let hasElements = false;
             this.listItemsEl.forEach((itemEl, index) => {
                 if (list[index]) {
                     itemEl.classList.remove(LIST_ITEM_EMPTY);
                     itemEl.textContent = list[index];
                 } else {
-                    hasElements = true;
                     itemEl.classList.add(LIST_ITEM_EMPTY);
                     itemEl.textContent = '';
                 }
             });
-            if (hasElements) {
-                this.listItemsEl.classList.add(LIST_OPEN);
+            if (list.length > 0) {
+                this.listEl.classList.add(LIST_OPEN);
+            } else {
+                this.listEl.classList.remove(LIST_OPEN);
             }
         }
 
