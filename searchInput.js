@@ -24,6 +24,8 @@
             this.listEl = null;
             this.listItemsEl = [];
             this.searchList = [];
+            this.filteredList = [];
+            this.onSelectCallback = null;
         }
 
         /**
@@ -38,22 +40,38 @@
             }
         }
 
+        /**
+         * Select item callback
+         * @return {Number}
+         */
+        onSelect(callback) {
+            this.onSelectCallback = callback;
+        }
+
+        onItemClick(e) {
+            for (let i = 0, len = this.listItemsEl.length; i < len; i++) {
+                if (e.target === this.listItemsEl[i]) {
+                    this.onSelectCallback && this.onSelectCallback(this.filteredList[i]);
+                }
+            }
+        }
+
         onKeyUp(e) {
-            const filteredList = [];
+            this.filteredList = [];
             if (e.target.value === '') {
                 this.updateSearchList([]);
                 return;
             }
             const searchRegex = new RegExp(SearchInput.escapeRegex(e.target.value), 'i');
             for (const item of this.searchList) {
-                if (searchRegex.test(item.name)) {
-                    filteredList.push(`${item.name} - ${item.data}`);
+                if (searchRegex.test(item.text)) {
+                    this.filteredList.push(item);
                 }
-                if (filteredList.length === DEFAULT_SEARCH_LENGTH) {
+                if (this.filteredList.length === DEFAULT_SEARCH_LENGTH) {
                     break;
                 }
             }
-            this.updateSearchList(filteredList);
+            this.updateSearchList(this.filteredList);
         }
 
         initiateList(length = DEFAULT_SEARCH_LENGTH) {
@@ -73,7 +91,7 @@
             this.listItemsEl.forEach((itemEl, index) => {
                 if (list[index]) {
                     itemEl.classList.remove(LIST_ITEM_EMPTY);
-                    itemEl.textContent = list[index];
+                    itemEl.textContent = list[index].text;
                 } else {
                     itemEl.classList.add(LIST_ITEM_EMPTY);
                     itemEl.textContent = '';
@@ -96,6 +114,7 @@
             wrapEl.appendChild(inputEl);
 
             this.listEl = document.createElement('div');
+            this.listEl.addEventListener('click', this.onItemClick.bind(this));
             this.listEl.classList.add(LIST);
             wrapEl.appendChild(this.listEl);
 
